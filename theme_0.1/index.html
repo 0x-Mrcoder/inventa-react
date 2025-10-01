@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventa - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+       <!-- Sidebar Container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header Container -->
+            <div id="header-container"></div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <!-- <div class="stat-icon">
+                            <i class="material-icons-round">inventory_2</i>
+                        </div> -->
+                        <div class="stat-content">
+                            <h3 class="stat-value">1,247</h3>
+                            <p class="stat-label">Items in Stock</p>
+                            <div class="stat-change positive">
+                                <!-- <i class="material-icons-round">trending_up</i> -->
+                                <!-- <span>+12%</span> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <!-- <div class="stat-icon">
+                            <i class="material-icons-round">warning</i>
+                        </div> -->
+                        <div class="stat-content">
+                            <h3 class="stat-value">23</h3>
+                            <p class="stat-label">Items Running Low</p>
+                            <div class="stat-change negative">
+                                <!-- <i class="material-icons-round">trending_down</i>
+                                <span>-5%</span> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <!-- <div class="stat-icon">
+                            <i class="material-icons-round">point_of_sale</i>
+                        </div> -->
+                        <div class="stat-content">
+                            <h3 class="stat-value">₦45,230</h3>
+                            <p class="stat-label">Money Made Today</p>
+                            <div class="stat-change positive">
+                                <!-- <i class="material-icons-round">trending_up</i>
+                                <span>+8%</span> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <!-- <div class="stat-icon">
+                            <i class="material-icons-round">account_balance_wallet</i>
+                        </div> -->
+                        <div class="stat-content">
+                            <h3 class="stat-value">₦12,450</h3>
+                            <p class="stat-label">Profit Made Today</p>
+                            <!-- <div class="stat-change positive">
+                                <i class="material-icons-round">trending_up</i>
+                                <span>+15%</span>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="content-grid">
+                    <!-- Stock Balance Overview -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="material-icons-round">inventory_2</i>
+                                What's in Your Shop
+                            </h2>
+                            <button class="card-action">
+                                <i class="material-icons-round">more_vert</i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="stock-list">
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <h4>Cement (50kg)</h4>
+                                        <p>Construction Materials</p>
+                                    </div>
+                                    <div class="stock-balance">
+                                        <span class="balance-value">245</span>
+                                        <span class="balance-unit">bags</span>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <h4>Steel Rods (12mm)</h4>
+                                        <p>Construction Materials</p>
+                                    </div>
+                                    <div class="stock-balance">
+                                        <span class="balance-value">89</span>
+                                        <span class="balance-unit">pieces</span>
+                                    </div>
+                                </div>
+                                <div class="stock-item">
+                                    <div class="stock-info">
+                                        <h4>Sand (Truck Load)</h4>
+                                        <p>Construction Materials</p>
+                                    </div>
+                                    <div class="stock-balance">
+                                        <span class="balance-value">12</span>
+                                        <span class="balance-unit">loads</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="material-icons-round">warning</i>
+                                Items Running Out
+                            </h2>
+                            <button class="card-action">
+                                <i class="material-icons-round">more_vert</i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="alert-list">
+                                <div class="alert-item critical">
+                                    <div class="alert-icon">
+                                        <i class="material-icons-round">error</i>
+                                    </div>
+                                    <div class="alert-content">
+                                        <h4>Paint (White)</h4>
+                                        <p>Only 5 gallons left - Need to buy more!</p>
+                                    </div>
+                                    <div class="alert-action">
+                                        <button class="btn-small">Buy More</button>
+                                    </div>
+                                </div>
+                                <div class="alert-item warning">
+                                    <div class="alert-icon">
+                                        <i class="material-icons-round">warning</i>
+                                    </div>
+                                    <div class="alert-content">
+                                        <h4>Nails (2 inches)</h4>
+                                        <p>Only 15 boxes left - Need to buy more!</p>
+                                    </div>
+                                    <div class="alert-action">
+                                        <button class="btn-small">Buy More</button>
+                                    </div>
+                                </div>
+                                <div class="alert-item warning">
+                                    <div class="alert-icon">
+                                        <i class="material-icons-round">warning</i>
+                                    </div>
+                                    <div class="alert-content">
+                                        <h4>PVC Pipes (4 inches)</h4>
+                                        <p>Only 8 pieces left - Need to buy more!</p>
+                                    </div>
+                                    <div class="alert-action">
+                                        <button class="btn-small">Buy More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/theme-manager.js"></script>
+    <script src="js/sidebar-component.js"></script>
+    <script src="js/header-component.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load sidebar component
+            window.sidebarComponent = await SidebarComponent.loadSidebar('sidebar-container');
+            
+            // Load header component
+            window.headerComponent = await HeaderComponent.loadHeader('header-container');
+        });
+    </script>
+</body>
+</html>

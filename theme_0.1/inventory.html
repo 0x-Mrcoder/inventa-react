@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventa - Inventory Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header Container -->
+            <div id="header-container"></div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Actions -->
+                <div class="actions-bar">
+                    <button class="btn-primary" onclick="togglePurchaseForm()">
+                        <i class="material-icons-round">add_box</i>
+                        Add Products
+                    </button>
+                    <button class="btn-secondary" onclick="toggleStockAdjustmentForm()">
+                        <i class="material-icons-round">edit</i>
+                        Stock Adjustment
+                    </button>
+                    <button class="btn-secondary" onclick="exportInventory()">
+                        <i class="material-icons-round">download</i>
+                        Export Data
+                    </button>
+                    <button class="btn-secondary" onclick="toggleImportForm()">
+                        <i class="material-icons-round">upload</i>
+                        Import CSV
+                    </button>
+                </div>
+
+                <!-- Add Products Form (Inline) -->
+                <div class="purchase-form-section" id="purchaseFormSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Add New Products</h3>
+                            <button class="btn-close" onclick="closePurchaseForm()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+                <form id="addProductForm">
+                    <!-- Product Image -->
+                    <div class="form-group">
+                        <label for="productImage">Product Image</label>
+                        <div class="image-upload-container">
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <input type="file" id="productImage" accept="image/*" style="display: none;">
+                                <div class="upload-placeholder" onclick="document.getElementById('productImage').click()">
+                                    <i class="material-icons-round">cloud_upload</i>
+                                    <span>Click to upload image</span>
+                                    <small>Supports JPG, PNG, GIF (Max 5MB)</small>
+                                </div>
+                            </div>
+                            <div class="image-preview" id="imagePreview" style="display: none;">
+                                <img id="previewImg" src="" alt="Product Preview">
+                                <button type="button" class="remove-image-btn" onclick="removeImage()">
+                                    <i class="material-icons-round">close</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Basic Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productName">Product Name *</label>
+                            <input type="text" id="productName" placeholder="Enter product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productSku">SKU</label>
+                            <input type="text" id="productSku" placeholder="Enter SKU (optional)">
+                        </div>
+                    </div>
+                    
+                    <!-- Category Selection -->
+                    <div class="form-row">
+                    <div class="form-group">
+                            <label for="productCategory">Category *</label>
+                            <div class="category-select-container">
+                                <select id="productCategory" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                                <button type="button" class="btn-secondary btn-small" onclick="openCategoryModal()">
+                                    <i class="material-icons-round">add</i>
+                                    New Category
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productBrand">Brand *</label>
+                            <div class="brand-select-container">
+                                <select id="productBrand" required>
+                                    <option value="">Select Brand</option>
+                                </select>
+                                <button type="button" class="btn-secondary btn-small" onclick="openBrandModal()">
+                            <i class="material-icons-round">add</i>
+                                    New Brand
+                        </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock and Pricing Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productQuantity">Initial Quantity *</label>
+                            <input type="number" id="productQuantity" placeholder="Enter quantity" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productUnit">Unit *</label>
+                            <select id="productUnit" required>
+                                <option value="">Select Unit</option>
+                                <option value="pcs">Pieces</option>
+                                <option value="pairs">Pairs</option>
+                                <option value="sets">Sets</option>
+                                <option value="boxes">Boxes</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="g">Grams</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productCostPrice">Cost Price *</label>
+                            <input type="number" id="productCostPrice" placeholder="Enter cost price" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productSellingPrice">Selling Price *</label>
+                            <input type="number" id="productSellingPrice" placeholder="Enter selling price" step="0.01" min="0" required>
+                        </div>
+                    </div>
+
+                    <!-- Stock Management -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productMinStock">Minimum Stock Level</label>
+                            <input type="number" id="productMinStock" placeholder="Enter minimum stock level" min="0" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="productMaxStock">Maximum Stock Level</label>
+                            <input type="number" id="productMaxStock" placeholder="Enter maximum stock level" min="0">
+                        </div>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="form-group">
+                        <label for="productDescription">Product Description</label>
+                        <textarea id="productDescription" rows="3" placeholder="Enter product description (optional)"></textarea>
+                    </div>
+                    
+                    <!-- Product Specifications -->
+                    <div class="form-group">
+                        <label for="productSpecifications">Specifications</label>
+                        <textarea id="productSpecifications" rows="2" placeholder="Enter product specifications (optional)"></textarea>
+                    </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="closePurchaseForm()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="saveNewProduct()">Add Product</button>
+                            </div>
+                </form>
+        </div>
+    </div>
+
+                <!-- Stock Adjustment Form (Inline) -->
+                <div class="stock-adjustment-section" id="stockAdjustmentSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Stock Adjustment</h3>
+                            <button class="btn-close" onclick="closeStockAdjustmentForm()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+                <form id="stockAdjustmentForm">
+                    <div class="form-group">
+                        <label for="adjustmentItem">Item</label>
+                        <select id="adjustmentItem" required>
+                            <option value="">Select Item</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adjustmentType">Adjustment Type</label>
+                            <select id="adjustmentType" required>
+                                <option value="">Select Type</option>
+                                <option value="increase">Increase Stock</option>
+                                <option value="decrease">Decrease Stock</option>
+                                <option value="set">Set Stock Level</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="adjustmentQuantity">Quantity</label>
+                            <input type="number" id="adjustmentQuantity" placeholder="Quantity" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adjustmentReason">Reason</label>
+                        <textarea id="adjustmentReason" rows="3" placeholder="Reason for adjustment..." required></textarea>
+                    </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="closeStockAdjustmentForm()">Cancel</button>
+                                <button type="button" class="btn-primary" onclick="saveStockAdjustment()">Save Adjustment</button>
+                            </div>
+                </form>
+        </div>
+    </div>
+
+                <!-- CSV Import Form (Inline) -->
+                <div class="import-form-section" id="importFormSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                <h3>Import Inventory from CSV</h3>
+                            <button class="btn-close" onclick="closeImportForm()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+                        <div class="form-content">
+                <div class="import-instructions">
+                    <h4>CSV Format Requirements:</h4>
+                    <p>Your CSV file should have the following columns in this order:</p>
+                    <ul>
+                        <li><strong>Name</strong> - Item name (required)</li>
+                        <li><strong>SKU</strong> - Stock keeping unit (required)</li>
+                        <li><strong>Category</strong> - Item category (required)</li>
+                        <li><strong>Current Stock</strong> - Current quantity (required)</li>
+                        <li><strong>Unit</strong> - Unit of measurement (required)</li>
+                        <li><strong>Cost Price</strong> - Purchase price (required)</li>
+                        <li><strong>Selling Price</strong> - Sale price (required)</li>
+                        <li><strong>Min Stock Level</strong> - Minimum stock alert (required)</li>
+                    </ul>
+                    <p><strong>Note:</strong> The first row should contain headers. Existing items with the same SKU will be updated.</p>
+                </div>
+                
+                <div class="import-section">
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">
+                            <i class="material-icons-round">cloud_upload</i>
+                        </div>
+                        <div class="upload-text">
+                            <h4>Drop CSV file here or click to browse</h4>
+                            <p>Supported format: .csv files only</p>
+                        </div>
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                    
+                    <div class="import-preview" id="importPreview" style="display: none;">
+                        <h4>Preview Data</h4>
+                        <div class="preview-table-container">
+                            <table class="preview-table" id="previewTable">
+                                <thead id="previewTableHead"></thead>
+                                <tbody id="previewTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="import-summary" id="importSummary"></div>
+                    </div>
+                </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn-secondary" onclick="closeImportForm()">Cancel</button>
+                <button class="btn-primary" id="importBtn" onclick="importCSVData()" disabled>Import Data</button>
+            </div>
+        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Item Form (Inline) -->
+                <div class="edit-item-section" id="editItemSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Edit Item</h3>
+                            <button class="btn-close" onclick="closeEditItemForm()">
+                                <i class="material-icons-round">close</i>
+                            </button>
+                        </div>
+                        <form id="editItemForm">
+                            <input type="hidden" id="editItemId">
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editItemName">Item Name *</label>
+                                    <input type="text" id="editItemName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editItemSku">SKU *</label>
+                                    <input type="text" id="editItemSku" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editItemCategory">Category *</label>
+                                    <select id="editItemCategory" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Sneakers">Sneakers</option>
+                                        <option value="Dress Shoes">Dress Shoes</option>
+                                        <option value="Boots">Boots</option>
+                                        <option value="Sandals">Sandals</option>
+                                        <option value="Athletic Shoes">Athletic Shoes</option>
+                                        <option value="Casual Shoes">Casual Shoes</option>
+                                        <option value="Heels">Heels</option>
+                                        <option value="Loafers">Loafers</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editItemUnit">Unit *</label>
+                                    <select id="editItemUnit" required>
+                                        <option value="">Select Unit</option>
+                                        <option value="pcs">Pieces</option>
+                                        <option value="pairs">Pairs</option>
+                                        <option value="boxes">Boxes</option>
+                                        <option value="kg">Kilograms</option>
+                                        <option value="g">Grams</option>
+                                        <option value="l">Liters</option>
+                                        <option value="ml">Milliliters</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editItemCostPrice">Cost Price (₦) *</label>
+                                    <input type="number" id="editItemCostPrice" step="0.01" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editItemSellingPrice">Selling Price (₦) *</label>
+                                    <input type="number" id="editItemSellingPrice" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editItemCurrentStock">Current Stock *</label>
+                                    <input type="number" id="editItemCurrentStock" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editItemMinStock">Min Stock Level *</label>
+                                    <input type="number" id="editItemMinStock" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editItemDescription">Description</label>
+                                <textarea id="editItemDescription" rows="3" placeholder="Item description..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editItemImage">Item Image URL</label>
+                                <input type="url" id="editItemImage" placeholder="https://example.com/image.jpg">
+    </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="closeEditItemForm()">Cancel</button>
+                                <button type="button" class="btn-primary" onclick="updateItem()">Update Item</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Item History Form (Inline) -->
+                <div class="item-history-section" id="itemHistorySection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Item History</h3>
+                            <button class="btn-close" onclick="closeItemHistoryForm()">
+                                <i class="material-icons-round">close</i>
+                            </button>
+                        </div>
+                        <div class="item-history-content">
+                            <!-- Item Information -->
+                            <div class="details-section">
+                                <h4>Item Information</h4>
+                                <div class="details-grid">
+                                    <div class="detail-item">
+                                        <label>Item Name:</label>
+                                        <span id="historyItemName">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>SKU:</label>
+                                        <span id="historyItemSku">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Category:</label>
+                                        <span id="historyItemCategory">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Current Stock:</label>
+                                        <span id="historyItemCurrentStock">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stock Movement History -->
+                            <div class="details-section">
+                                <h4>Stock Movement History</h4>
+                                <div class="history-table-container">
+                                    <table class="history-table" id="stockHistoryTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Quantity</th>
+                                                <th>Previous Stock</th>
+                                                <th>New Stock</th>
+                                                <th>Reason</th>
+                                                <th>User</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stockHistoryTableBody">
+                                            <!-- History will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Price History -->
+                            <div class="details-section">
+                                <h4>Price History</h4>
+                                <div class="history-table-container">
+                                    <table class="history-table" id="priceHistoryTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Previous Price</th>
+                                                <th>New Price</th>
+                                                <th>Change</th>
+                                                <th>User</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="priceHistoryTableBody">
+                                            <!-- Price history will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Item Statistics -->
+                            <div class="details-section">
+                                <h4>Item Statistics</h4>
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <label>Total Stock Movements:</label>
+                                        <span id="historyTotalMovements">-</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Total Stock In:</label>
+                                        <span id="historyTotalStockIn">-</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Total Stock Out:</label>
+                                        <span id="historyTotalStockOut">-</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Price Changes:</label>
+                                        <span id="historyPriceChanges">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="details-actions">
+                                <button type="button" class="btn-secondary" onclick="closeItemHistoryForm()">Close</button>
+                                <button type="button" class="btn-primary" onclick="exportItemHistory()">Export History</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reorder Form (Inline) -->
+                <div class="reorder-section" id="reorderSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Reorder Item</h3>
+                            <button class="btn-close" onclick="closeReorderForm()">
+                                <i class="material-icons-round">close</i>
+                            </button>
+                        </div>
+                        <form id="reorderForm">
+                            <input type="hidden" id="reorderItemId">
+                            
+                            <!-- Item Information -->
+                            <div class="details-section">
+                                <h4>Item Information</h4>
+                                <div class="details-grid">
+                                    <div class="detail-item">
+                                        <label>Item Name:</label>
+                                        <span id="reorderItemName">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>SKU:</label>
+                                        <span id="reorderItemSku">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Current Stock:</label>
+                                        <span id="reorderCurrentStock">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Min Stock Level:</label>
+                                        <span id="reorderMinStock">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Reorder Details -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="reorderQuantity">Reorder Quantity *</label>
+                                    <input type="number" id="reorderQuantity" min="1" required oninput="updateReorderSummary()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="reorderUnitCost">Unit Cost (₦) *</label>
+                                    <input type="number" id="reorderUnitCost" step="0.01" min="0" required oninput="updateReorderSummary()">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="reorderSupplier">Supplier</label>
+                                    <input type="text" id="reorderSupplier" placeholder="Supplier name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="reorderExpectedDate">Expected Delivery Date</label>
+                                    <input type="date" id="reorderExpectedDate">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reorderNotes">Reorder Notes</label>
+                                <textarea id="reorderNotes" rows="3" placeholder="Additional notes for this reorder..."></textarea>
+                            </div>
+
+                            <!-- Reorder Summary -->
+                            <div class="details-section">
+                                <h4>Reorder Summary</h4>
+                                <div class="summary-grid">
+                                    <div class="summary-item">
+                                        <label>Reorder Quantity:</label>
+                                        <span id="reorderSummaryQuantity">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Unit Cost:</label>
+                                        <span id="reorderSummaryUnitCost">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Total Cost:</label>
+                                        <span id="reorderSummaryTotalCost">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>New Stock Level:</label>
+                                        <span id="reorderSummaryNewStock">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="closeReorderForm()">Cancel</button>
+                                <button type="button" class="btn-primary" onclick="processReorder()">Process Reorder</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="categoryFilter" onchange="filterInventory()">
+                            <option value="">All Categories</option>
+                            <option value="Sneakers">Sneakers</option>
+                            <option value="Dress Shoes">Dress Shoes</option>
+                            <option value="Boots">Boots</option>
+                            <option value="Sandals">Sandals</option>
+                            <option value="Athletic Shoes">Athletic Shoes</option>
+                            <option value="Casual Shoes">Casual Shoes</option>
+                            <option value="Heels">Heels</option>
+                            <option value="Loafers">Loafers</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Stock Status:</label>
+                        <select id="stockFilter" onchange="filterInventory()">
+                            <option value="">All Items</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                            <option value="normal">Normal Stock</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <input type="text" id="searchInput" placeholder="Search items..." onkeyup="searchInventory()">
+                        <i class="material-icons-round">search</i>
+                    </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="table-container">
+                    <table class="data-table" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Item Name</th>
+                                <th>SKU</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Unit</th>
+                                <th>Cost Price</th>
+                                <th>Selling Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Product Image</h3>
+                <button class="modal-close" onclick="closeImageModal()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-container">
+                    <img id="modalImage" src="" alt="Product Image" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Category</h3>
+                <button class="modal-close" onclick="closeCategoryModal()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <div class="form-group">
+                        <label for="newCategoryName">Category Name *</label>
+                        <input type="text" id="newCategoryName" placeholder="Enter category name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newCategoryDescription">Description</label>
+                        <textarea id="newCategoryDescription" rows="2" placeholder="Enter category description (optional)"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="saveNewCategory()">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Modal -->
+    <div id="brandModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Brand</h3>
+                <button class="modal-close" onclick="closeBrandModal()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="brandForm">
+                    <div class="form-group">
+                        <label for="newBrandName">Brand Name *</label>
+                        <input type="text" id="newBrandName" placeholder="Enter brand name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newBrandDescription">Description</label>
+                        <textarea id="newBrandDescription" rows="2" placeholder="Enter brand description (optional)"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeBrandModal()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="saveNewBrand()">Add Brand</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/theme-manager.js"></script>
+    <script src="js/sidebar-component.js"></script>
+    <script src="js/header-component.js"></script>
+    <script src="js/shop-config.js"></script>
+    <script src="js/inventory.js"></script>
+    <script>
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load sidebar component
+            window.sidebarComponent = await SidebarComponent.loadSidebar('sidebar-container');
+            
+            // Load header component
+            window.headerComponent = await HeaderComponent.loadHeader('header-container');
+        });
+    </script>
+</body>
+</html>

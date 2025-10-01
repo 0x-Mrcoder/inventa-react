@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventa - Sales Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header Container -->
+            <div id="header-container"></div>
+
+            <!-- Content -->
+            <div class="content">
+
+                <!-- Sale Type Filter Buttons -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab-button active" onclick="switchSaleType('normal')" id="normalSaleBtn">
+                            <i class="material-icons-round">point_of_sale</i>
+                            <span>Normal Sell</span>
+                        </button>
+                        <button class="tab-button" onclick="switchSaleType('credit')" id="creditSaleBtn">
+                            <i class="material-icons-round">credit_card</i>
+                            <span>Sell on Credit</span>
+                        </button>
+                        <button class="tab-button" onclick="switchSaleType('return')" id="returnSaleBtn">
+                            <i class="material-icons-round">undo</i>
+                            <span>Return Sells</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Selection for Sale -->
+                <div class="record-sale-section" id="recordSaleSection" style="display: block;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3 id="saleTypeTitle">Select Products to Sell</h3>
+                            <div class="header-actions">
+                                <div class="search-box">
+                                    <input type="text" id="productSearch" placeholder="Search products..." onkeyup="filterProducts()">
+                                    <i class="material-icons-round">search</i>
+                                </div>
+                                <div class="filter-actions">
+                                    <select id="brandFilter" onchange="filterProducts()">
+                                        <option value="all">All Brands</option>
+                                        <option value="Dangote">Dangote</option>
+                                        <option value="Lafarge">Lafarge</option>
+                                        <option value="Steel Works">Steel Works</option>
+                                        <option value="Dulux">Dulux</option>
+                                        <option value="Berger">Berger</option>
+                                        <option value="Premium Sand">Premium Sand</option>
+                                        <option value="Hardware Pro">Hardware Pro</option>
+                                        <option value="AquaFlow">AquaFlow</option>
+                                    </select>
+                                </div>
+                                <div class="cart-info">
+                                    <span class="cart-count" id="cartCount">0</span>
+                                    <button class="mark-sold-btn" onclick="openCartModal()" id="markSoldBtn" disabled>
+                                        <i class="material-icons-round">shopping_cart</i>
+                                        <span id="markSoldText">Mark as Sold</span>
+                                    </button>
+<button class="btn-secondary" onclick="showInvoiceModalDirectly()" title="Generate Invoice from Recent Sale">
+    <i class="material-icons-round">receipt_long</i>
+    <span>Invoice</span>
+</button>
+                                </div>
+                            </div>
+                            </div>
+                        <div class="card-content">
+                            <div class="products-table-container">
+                                <table class="products-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Product Name</th>
+                                            <th>Brand</th>
+                                            <th>Category</th>
+                                            <th>Stock</th>
+                                            <th>Unit</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Sales Qty</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productsTableBody">
+                                        <!-- Products will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+
+
+                <!-- Sale Details Form (Inline) -->
+                <div class="sale-details-section" id="saleDetailsSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Sale Details</h3>
+                            <button class="btn-close" onclick="closeSaleDetailsForm()">
+                                <i class="material-icons-round">close</i>
+                            </button>
+                        </div>
+                        <div class="sale-details-content">
+                            <!-- Sale Information -->
+                            <div class="details-section">
+                                <h4>Sale Information</h4>
+                                <div class="details-grid">
+                                    <div class="detail-item">
+                                        <label>Sale ID:</label>
+                                        <span id="detailsSaleId">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Date:</label>
+                                        <span id="detailsSaleDate">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Time:</label>
+                                        <span id="detailsSaleTime">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Customer:</label>
+                                        <span id="detailsCustomer">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Cashier:</label>
+                                        <span id="detailsCashier">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Payment Method:</label>
+                                        <span id="detailsPaymentMethod">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Subtotal:</label>
+                                        <span id="detailsSubtotal">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Discount:</label>
+                                        <span id="detailsDiscount">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Total Amount:</label>
+                                        <span id="detailsTotalAmount">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Status:</label>
+                                        <span id="detailsStatus">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Items Sold -->
+                            <div class="details-section">
+                                <h4>Items Sold</h4>
+                                <div class="items-table-container">
+                                    <table class="items-table" id="detailsItemsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="detailsItemsTableBody">
+                                            <!-- Items will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Sale Summary -->
+                            <div class="details-section">
+                                <h4>Sale Summary</h4>
+                                <div class="summary-grid">
+                                    <div class="summary-item">
+                                        <label>Total Items:</label>
+                                        <span id="detailsTotalItems">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Total Quantity:</label>
+                                        <span id="detailsTotalQuantity">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Discount Applied:</label>
+                                        <span id="detailsDiscountApplied">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Final Total:</label>
+                                        <span id="detailsFinalTotal">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="details-actions">
+                                <button type="button" class="btn-secondary" onclick="closeSaleDetailsForm()">Close</button>
+                                <button type="button" class="btn-primary" onclick="printReceiptFromDetails()">Print Receipt</button>
+                                <button type="button" class="btn-primary" onclick="showReceiptFromDetails()">View Receipt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Return Details Form (Inline) -->
+                <div class="return-details-section" id="returnDetailsSection" style="display: none;">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h3>Return Details</h3>
+                            <button class="btn-close" onclick="closeReturnDetailsForm()">
+                                <i class="material-icons-round">close</i>
+                            </button>
+                        </div>
+                        <div class="return-details-content">
+                            <!-- Return Information -->
+                            <div class="details-section">
+                                <h4>Return Information</h4>
+                                <div class="details-grid">
+                                    <div class="detail-item">
+                                        <label>Return ID:</label>
+                                        <span id="detailsReturnId">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Original Sale ID:</label>
+                                        <span id="detailsOriginalSaleId">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Return Date:</label>
+                                        <span id="detailsReturnDate">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Return Time:</label>
+                                        <span id="detailsReturnTime">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Processed By:</label>
+                                        <span id="detailsProcessedBy">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Refund Method:</label>
+                                        <span id="detailsRefundMethod">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Refund Amount:</label>
+                                        <span id="detailsRefundAmount">-</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <label>Status:</label>
+                                        <span id="detailsReturnStatus">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Return Reason -->
+                            <div class="details-section">
+                                <h4>Return Reason</h4>
+                                <div class="reason-display">
+                                    <span id="detailsReturnReason">-</span>
+                                </div>
+                            </div>
+
+                            <!-- Items Returned -->
+                            <div class="details-section">
+                                <h4>Items Returned</h4>
+                                <div class="items-table-container">
+                                    <table class="items-table" id="detailsReturnItemsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="detailsReturnItemsTableBody">
+                                            <!-- Items will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Return Summary -->
+                            <div class="details-section">
+                                <h4>Return Summary</h4>
+                                <div class="summary-grid">
+                                    <div class="summary-item">
+                                        <label>Total Items:</label>
+                                        <span id="detailsReturnTotalItems">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Total Quantity:</label>
+                                        <span id="detailsReturnTotalQuantity">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Refund Amount:</label>
+                                        <span id="detailsReturnRefundTotal">-</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <label>Processing Status:</label>
+                                        <span id="detailsReturnProcessingStatus">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="details-actions">
+                                <button type="button" class="btn-secondary" onclick="closeReturnDetailsForm()">Close</button>
+                                <button type="button" class="btn-primary" onclick="printReturnReceiptFromDetails()">Print Return Receipt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+                
+          
+
+    <!-- Add Return Modal -->
+    <div id="addReturnModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Return</h3>
+                <button class="modal-close" onclick="closeAddReturnModal()">
+                    <i class="material-icons-round">close</i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addReturnForm">
+                    <div class="form-group">
+                        <label for="returnDate">Return Date:</label>
+                        <input type="date" id="returnDate" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="saleIdInput">Sale ID:</label>
+                            <input type="text" id="saleIdInput" placeholder="Enter Sale ID" onchange="loadSaleDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label for="productIdInput">Product ID:</label>
+                            <input type="text" id="productIdInput" placeholder="Enter Product ID" onchange="loadProductDetails()">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="saleDetailsSection" style="display: none;">
+                        <label>Sale Details:</label>
+                        <div class="sale-details-card" id="saleDetailsCard">
+                            <!-- Sale details will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="returnReason">Return Reason:</label>
+                        <select id="returnReason" required>
+                            <option value="">Select Reason</option>
+                            <option value="defective">Defective Product</option>
+                            <option value="wrong-size">Wrong Size</option>
+                            <option value="not-satisfied">Not Satisfied</option>
+                            <option value="damaged">Damaged in Transit</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="returnQuantity">Return Quantity:</label>
+                        <input type="number" id="returnQuantity" placeholder="Enter quantity" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="returnNotes">Notes:</label>
+                        <textarea id="returnNotes" rows="3" placeholder="Additional notes about the return"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeAddReturnModal()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="processAddReturn()">Add Return</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Sales Receipt</h3>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="printReceipt()">
+                        <i class="material-icons-round">print</i>
+                        Print
+                    </button>
+                    <button class="btn-secondary" onclick="downloadReceipt()">
+                        <i class="material-icons-round">download</i>
+                        Download PDF
+                    </button>
+                    <button class="btn-primary" onclick="generateInvoice()">
+                        <i class="material-icons-round">receipt_long</i>
+                        Generate Invoice
+                    </button>
+                    <button class="btn-secondary" onclick="shareInvoice()">
+                        <i class="material-icons-round">share</i>
+                        Share
+                    </button>
+                    <button class="modal-close" onclick="closeReceiptModal()">
+                        <i class="material-icons-round">close</i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="receipt" id="receiptContent">
+                    <!-- Receipt content will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal" id="invoiceModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Invoice Generator</h3>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="printInvoice()">
+                        <i class="material-icons-round">print</i>
+                        Print Invoice
+                    </button>
+                    <button class="btn-secondary" onclick="downloadInvoice()">
+                        <i class="material-icons-round">download</i>
+                        Download PDF
+                    </button>
+                    <button class="btn-primary" onclick="shareInvoiceLink()">
+                        <i class="material-icons-round">share</i>
+                        Share Invoice
+                    </button>
+                    <button class="btn-secondary" onclick="emailInvoice()">
+                        <i class="material-icons-round">email</i>
+                        Email Invoice
+                    </button>
+                    <button class="modal-close" onclick="closeInvoiceModal()">
+                        <i class="material-icons-round">close</i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoiceNumber">Invoice Number:</label>
+                            <input type="text" id="invoiceNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoiceDate">Invoice Date:</label>
+                            <input type="date" id="invoiceDate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dueDate">Due Date:</label>
+                            <input type="date" id="dueDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentTerms">Payment Terms:</label>
+                            <select id="paymentTerms">
+                                <option value="net15">Net 15</option>
+                                <option value="net30" selected>Net 30</option>
+                                <option value="net45">Net 45</option>
+                                <option value="net60">Net 60</option>
+                                <option value="due_on_receipt">Due on Receipt</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customerEmail">Customer Email (for sharing):</label>
+                        <input type="email" id="customerEmail" placeholder="customer@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="invoiceNotes">Notes:</label>
+                        <textarea id="invoiceNotes" rows="3" placeholder="Additional notes for the invoice"></textarea>
+                    </div>
+                </div>
+                
+                <div class="invoice-preview" id="invoicePreview">
+                    <!-- Invoice preview will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/theme-manager.js"></script>
+    <script src="js/sidebar-component.js"></script>
+    <script src="js/header-component.js"></script>
+    <script src="js/sales.js"></script>
+    <script>
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load sidebar component
+            window.sidebarComponent = await SidebarComponent.loadSidebar('sidebar-container');
+            
+            // Load header component
+            window.headerComponent = await HeaderComponent.loadHeader('header-container');
+        });
+    </script>
+</body>
+</html>
